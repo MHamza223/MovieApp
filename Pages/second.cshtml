@@ -1,0 +1,128 @@
+@page 
+@model MyWebApp.Pages.GenreModel
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Movies with Genre: @Model.SelectedGenre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .carousel-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .carousel {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 400px; /* Set a fixed height for the carousel */
+            object-fit: cover; /* Ensure the image retains its aspect ratio */
+            display: none;
+            border-radius: 10px;
+        }
+
+        .carousel img.active {
+            display: block;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 24px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .arrow.left {
+            left: 10px;
+        }
+
+        .arrow.right {
+            right: 10px;
+        }
+
+        .movie-details {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .movie-details span {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel-container">
+        <div class="carousel">
+            @foreach (var movie in Model.MoviesWithGenre)
+            {
+                <img src="@movie.backdrop_path" alt="@movie.Title" class="carousel-image" />
+                <div class="movie-details">
+                    <span>@movie.Title</span>
+                </div>
+            }
+
+            <span class="arrow left" onclick="changeSlide(-1)">&#10094;</span>
+            <span class="arrow right" onclick="changeSlide(1)">&#10095;</span>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.getElementsByClassName('carousel-image');
+
+        showSlide(currentSlide);
+
+        function showSlide(index) {
+            if (index < 0) {
+                currentSlide = slides.length - 1;
+            } else if (index >= slides.length) {
+                currentSlide = 0;
+            }
+
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+
+            slides[currentSlide].classList.add('active');
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+    </script>
+</body>
+
+</html>
